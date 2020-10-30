@@ -1,0 +1,13 @@
+<div>
+    <form [formGroup]="createProductForm">
+        <p style="font-size: 20px;">Create Product</p>
+        Name<br>
+        <input [formControlName]="'name'" type="text"><br><br>
+        description<br>
+        <textarea [formControlName]="'description'" type="text" rows="8"></textarea><br><br>
+        <button (click)="createProduct()">Create</button>
+    </form>
+    <div *ngIf="!valid" style="color: red; text-align: center; padding: 10px;">
+        Please fill all the fields!
+    </div>
+</div>

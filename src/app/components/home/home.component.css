@@ -1,0 +1,48 @@
+#container {
+    margin: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 5px;
+}
+
+.product {
+    position: relative;
+    text-align: center;
+    background: whitesmoke;
+    padding: 5px;
+    padding-bottom: 20px;
+}
+
+.details {
+    position: absolute;
+    bottom: 3px;
+    font-size: 20px;
+    font-weight: 600;
+    right: 5px;
+    padding: 2px 10px;
+    background: white;
+    cursor: pointer;
+    transition: 0.3s all ease;
+}   
+
+.details:hover {
+    color: gray;
+}
+
+@media (min-width: 360px) and (max-width: 550px){
+    #container{
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 550px) and (max-width: 770px){
+    #container{
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 770px) and (max-width: 1100px){
+    #container{
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}

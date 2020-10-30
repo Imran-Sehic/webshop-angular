@@ -1,0 +1,22 @@
+.header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: 3px solid black;
+    font-weight: 600;
+    padding: 0 15px;
+}
+
+.logo {
+    font-size: 35px;
+    font-family: 'Grenze Gotisch', cursive;
+    cursor: pointer;
+}
+
+.option {
+    cursor: pointer;
+}
+
+.option:hover {
+    color: gray;
+}

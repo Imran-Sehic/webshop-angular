@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "webshop"
+    }
+  },
+  "defaultProject": "webshop",
+  "cli": {
+    "analytics": false
+  }
 }

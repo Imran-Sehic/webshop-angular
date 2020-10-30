@@ -1,0 +1,13 @@
+<div *ngIf="dataLoaded">
+    <form [formGroup]="updateProductForm">
+        <p style="font-size: 20px;">Update Product</p>
+        Name<br>
+        <input [formControlName]="'name'" value="{{product.name}}" type="text"><br><br>
+        Description<br>
+        <textarea [formControlName]="'description'" value="{{product.description}}" type="text" rows="8"></textarea><br><br>
+        <button (click)="updateProduct()">Update</button>&nbsp;&nbsp;<button (click)="deleteProduct()">Delete</button>
+    </form>
+    <div *ngIf="!valid" style="color: red; text-align: center; padding: 10px;">
+        Please fill all the fields!
+    </div>
+</div>
