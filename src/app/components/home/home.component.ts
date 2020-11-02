@@ -3,7 +3,10 @@ import { Router } from '@angular/router';
 import { throwError } from 'rxjs';
 import { Product } from '../../models/product-model';
 import { ProductService } from '../../services/product.service';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import * as fromProduct from '../../state/product.reducer';
+import * as productActions from 'src/app/state/product.actions';
 
 @Component({
   selector: 'app-home',
@@ -12,18 +15,18 @@ import { Store } from '@ngrx/store';
 })
 export class HomeComponent implements OnInit {
 
-  products: Product[];
+  products$: Observable<Product[]>;
 
-  constructor(private productService: ProductService, private router: Router, private store: Store<any>) {}
+  constructor(private router: Router, private store: Store<fromProduct.AppState>) {}
 
   ngOnInit(): void {
-    this.productService.getAllProducts().subscribe(data => {
+    /*this.productService.getAllProducts().subscribe(data => {
       this.products = data;
     }, error => {
       throwError(error);
-    })
-    /*this.store.dispatch({type: 'LOAD_PRODUCTS'})
-    this.store.subscribe(state => (this.products = state.products.products))*/
+    })*/
+    this.store.dispatch(new productActions.LoadProducts())
+    this.products$ = this.store.pipe(select(fromProduct.getProducts))
   }
 
   goToDetails(id: string) {

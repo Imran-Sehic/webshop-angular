@@ -10,6 +10,9 @@ import { ProductDetailsComponent } from './components/product-details/product-de
 import { CreateProductComponent } from './components/create-product/create-product.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { productReducer } from './state/product.reducer';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule, Actions } from '@ngrx/effects';
+import { ProductEffect } from './state/product.effects';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { productReducer } from './state/product.reducer';
     HttpClientModule,
     ReactiveFormsModule,
     StoreModule.forRoot(productReducer),
-    StoreModule.forFeature('products', productReducer)
+    StoreModule.forFeature('products', productReducer),
+    EffectsModule.forRoot([]),
+    EffectsModule.forFeature([ProductEffect]),
+    StoreDevtoolsModule.instrument()
   ],
   providers: [],
   bootstrap: [AppComponent]

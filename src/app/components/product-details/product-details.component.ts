@@ -34,7 +34,6 @@ export class ProductDetailsComponent implements OnInit {
         description: new FormControl(this.product.description, Validators.required)
       });
       this.dataLoaded = true;
-      console.log(this.product)
     }, error => {
       throwError(error);
     })

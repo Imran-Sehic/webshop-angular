@@ -1,5 +1,5 @@
 <div id="container">
-    <div class="product" *ngFor="let product of products">
+    <div class="product" *ngFor="let product of (products$ | async)">
         <p style="font-weight: 600;">{{product.name}}</p>
         <p>{{product.description}}</p>
         <div class="details" (click)="goToDetails(product._id)"><i class="fa fa-search"></i></div>
