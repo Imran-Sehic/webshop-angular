@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Product } from 'src/app/models/product-model';
 import { ProductService } from 'src/app/services/product.service';
+import { Store } from '@ngrx/store';
+import * as fromProduct from '../../state/product.reducer';
+import * as productActions from '../../state/product.actions';
 
 @Component({
   selector: 'app-product-details',
@@ -13,42 +16,57 @@ import { ProductService } from 'src/app/services/product.service';
 export class ProductDetailsComponent implements OnInit {
 
   updateProductForm: FormGroup;
-  product: Product;
+  updatedProduct: Product;
   productId: string;
   valid: boolean = true;
-  dataLoaded: boolean = false;
 
-  constructor(private productService: ProductService, private activatedRoute: ActivatedRoute, private router: Router) {
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private fb: FormBuilder, private store: Store<fromProduct.AppState>) {
     this.productId = this.activatedRoute.snapshot.params.id;
+
+    this.updatedProduct = {
+      _id: null,
+      name: '',
+      description: ''
+    }
   }
 
   ngOnInit(): void {
-    this.getUserById()
+    this.updateProductForm = this.fb.group({
+      name: ["", Validators.required],
+      description: ["", Validators.required],
+      _id: null
+    })
+
+    this.store.dispatch(new productActions.LoadProduct(this.productId));
+
+    const product$: Observable<Product> = this.store.select(
+      fromProduct.getCurrentProduct
+    )
+
+    product$.subscribe(currentProduct => {
+      if(currentProduct){
+        this.updateProductForm.patchValue({
+          name: currentProduct.name,
+          description: currentProduct.description,
+          _id: currentProduct._id
+        });
+      }
+    })
+
   }
 
-  getUserById() {
-    this.productService.getProductById(this.productId).subscribe(product => {
-      this.product = product;
-      this.updateProductForm = new FormGroup({
-        name: new FormControl(this.product.name, Validators.required),
-        description: new FormControl(this.product.description, Validators.required)
-      });
-      this.dataLoaded = true;
-    }, error => {
-      throwError(error);
-    })
-  }
+  
 
   updateProduct() {
-    this.product.name = this.updateProductForm.get('name').value;
-    this.product.description = this.updateProductForm.get('description').value;
+    this.updatedProduct.name = this.updateProductForm.get('name').value;
+    this.updatedProduct.description = this.updateProductForm.get('description').value;
+    this.updatedProduct._id = this.updateProductForm.get('_id').value;
 
     if (this.updateProductForm.get('name').valid && this.updateProductForm.get('description').valid) {
       this.valid = true;
 
-      this.productService.updateProduct(this.product).subscribe(() => {
-        this.router.navigateByUrl('')
-      })
+      this.store.dispatch(new productActions.UpdateProduct(this.updatedProduct))
+      this.router.navigateByUrl('')
 
     } else {
       this.valid = false;
@@ -56,9 +74,10 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   deleteProduct() {
-    this.productService.deleteProduct(this.productId).subscribe(() => {
-      this.router.navigateByUrl('');
-    })
+    if(confirm("Do you really want to delete the product below?")){
+      this.store.dispatch(new productActions.DeleteProduct(this.productId));
+      this.router.navigateByUrl('')
+    }
   }
 
 }

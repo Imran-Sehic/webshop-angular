@@ -16,17 +16,14 @@ import * as productActions from 'src/app/state/product.actions';
 export class HomeComponent implements OnInit {
 
   products$: Observable<Product[]>;
+  error$: Observable<String>;
 
   constructor(private router: Router, private store: Store<fromProduct.AppState>) {}
 
   ngOnInit(): void {
-    /*this.productService.getAllProducts().subscribe(data => {
-      this.products = data;
-    }, error => {
-      throwError(error);
-    })*/
     this.store.dispatch(new productActions.LoadProducts())
     this.products$ = this.store.pipe(select(fromProduct.getProducts))
+    this.error$ = this.store.pipe(select(fromProduct.getError))
   }
 
   goToDetails(id: string) {

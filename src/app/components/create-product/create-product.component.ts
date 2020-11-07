@@ -3,6 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
 import { ProductPayload } from './create-product.payload';
+import { Store } from '@ngrx/store';
+import * as productActions from '../../state/product.actions';
+import * as fromProduct from '../../state/product.reducer';
 
 @Component({
   selector: 'app-create-product',
@@ -36,9 +39,8 @@ export class CreateProductComponent implements OnInit {
     if(this.createProductForm.get('name').valid && this.createProductForm.get('description').valid){
       this.valid = true;
 
-      this.productService.createProduct(this.createProductPayload).subscribe(() => {
-        this.router.navigateByUrl('');
-      })
+      new productActions.CreateProduct(this.createProductPayload)
+      this.router.navigateByUrl('')
 
     } else {
       this.valid = false;

@@ -19,12 +19,12 @@ export class ProductService {
     return this.http.get<Product>('http://localhost:3000/products/' + id);
   }
 
-  createProduct(product: ProductPayload) :Observable<void>{
-    return this.http.post<void>('http://localhost:3000/products', product);
+  createProduct(product: ProductPayload) :Observable<Product>{
+    return this.http.post<Product>('http://localhost:3000/products', product);
   }
 
-  updateProduct(product: Product) :Observable<void>{
-    return this.http.put<void>('http://localhost:3000/products', product);
+  updateProduct(product: Product) :Observable<Product>{
+    return this.http.put<Product>('http://localhost:3000/products', product);
   }
 
   deleteProduct(id: string) :Observable<void>{
